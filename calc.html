@@ -1,0 +1,137 @@
+<html>
+    <head>
+        <title>a simple calculator using react js</title>
+        <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+        <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+        <style>
+            body{
+            font-family: 'Open Sans', sans-serif;
+            font-family: 'Slabo 27px', serif;
+            background-color:#D3D3D3;
+            
+        }
+        .fullWindow{
+            background: #37474F;
+            width:300px;
+            height:500px;
+            margin:auto;
+            margin-top:100px;
+            border: 1px solid #212121;
+
+        }
+        .result{
+            height:100px;
+            width:100%;
+            background: #37474F;
+            font-size: 6vh;
+            text-align: right;
+            border:1px solid #37474F;
+            color:white;  
+            border:1px solid #212121;        
+        }
+        .keys{
+            width:75px;
+            height:100px;
+            float: right;
+            background: #37474F;
+            color:white;
+            font-size:4vh;
+            border: 1px solid #212121;
+        }
+        .lastKey{
+            background-color: #f94877 !important; 
+        }
+        </style>
+    </head>
+    <body>
+      <div id="app"></div>  
+    </body>
+    <script type="text/babel">
+    class Result extends React.Component{
+        
+        render(){
+            return(
+                <input type="text" className={this.props.classname} value={this.props.expression}/>
+            )
+        }
+    }
+    class Button extends React.Component{
+        constructor(props) {
+            super(props);
+    
+            this.onClick=this.onClick.bind(this)
+        }
+  
+        onClick() {
+            this.props.clickHandler(this.props.text);
+        }
+        render(){
+            return(
+                <button className={this.props.classname} onClick={this.onClick}>{this.props.text}</button>
+            )
+        }
+    }
+        class Calculator extends React.Component{
+            constructor(props){
+                super(props)
+                this.state={expression:'0'}
+                this.clickHandler=this.clickHandler.bind(this);
+                this.evaluate = this.evaluate.bind(this);
+                this.delete = this.delete.bind(this);
+            }
+            clickHandler(text) {
+                this.setState((prev) => ({expression: prev.expression == '0'? text : (prev.expression+text)}));
+            }
+            evaluate() {
+                var r=this.state.expression;
+                console.log(eval(1/4));
+
+                var result = eval(r);
+                
+                this.setState({expression: result.toString()});
+            }
+            delete() {
+                
+                this.setState((prev) => ({
+                    expression: prev.expression.length <= 1 ? '0' : prev.expression.slice(0, -1)}));
+                
+                
+
+            }
+            render(){
+                return(
+                    <div className="fullWindow">
+                            <Result classname="result" expression={this.state.expression}/>
+                            <div>
+                                <Button classname="keys lastKey" text="/" clickHandler={this.clickHandler}/>
+                                <Button classname="keys" text={7} clickHandler={this.clickHandler}/>
+                                <Button classname="keys" text={8} clickHandler={this.clickHandler}/>
+                                <Button classname="keys" text={9} clickHandler={this.clickHandler}/>
+                            </div>
+                            <div>
+                                <Button classname="keys lastKey" text="*" clickHandler={this.clickHandler}/>
+                                <Button classname="keys" text={4} clickHandler={this.clickHandler}/>
+                                <Button classname="keys" text={5} clickHandler={this.clickHandler}/>
+                                <Button classname="keys" text={6} clickHandler={this.clickHandler}/>
+                            </div>
+                            <div>
+                                <Button classname="keys lastKey" text="-" clickHandler={this.clickHandler}/>
+                                <Button classname="keys" text={1} clickHandler={this.clickHandler}/>
+                                <Button classname="keys" text={2} clickHandler={this.clickHandler}/>
+                                <Button classname="keys" text={3} clickHandler={this.clickHandler}/>
+                            </div>
+                            <div>
+                                <Button classname="keys lastKey" text="+" clickHandler={this.clickHandler}/>
+                                <button className="keys" onClick={this.evaluate}>=</button>
+                                <Button classname="keys" text="del" clickHandler={this.delete}/>
+                                <Button classname="keys" text={0} clickHandler={this.clickHandler}/>
+                            </div>
+                            
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(<Calculator/>,document.getElementById('app'))
+    </script>
+</html>
